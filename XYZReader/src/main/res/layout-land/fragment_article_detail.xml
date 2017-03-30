@@ -1,16 +1,14 @@
-<RelativeLayout android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-    <FrameLayout
-        android:id="@+id/photo_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/photo_placeholder">
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/photo_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/photo_placeholder">
         <!--suppress AndroidLintContentDescription -->
         <ImageView
             android:id="@+id/photo"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/detail_photo_height"
+            android:layout_height="280dp"
             android:scaleType="centerCrop"
             />
         <com.example.xyzreader.ui.ObservableScrollView
@@ -86,7 +84,7 @@
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp"
                         android:textColor="#9E9E9E"
-                        android:textColorLink="@color/theme_accent"
+                        android:textColorLink="@color/colorPrimaryDark"
                         android:textSize="@dimen/detail_body_text_size" />
 
                 </com.example.xyzreader.ui.MaxWidthLinearLayout>
@@ -103,13 +101,9 @@
             android:layout_gravity="bottom|end"
             android:layout_marginBottom="@dimen/fab_margin"
             android:layout_marginEnd="64dp"
-            android:background="@drawable/add_fab_background"
             android:contentDescription="@string/action_share"
             android:elevation="@dimen/fab_elevation"
             android:src="@drawable/ic_share"
             android:stateListAnimator="@anim/fab_state_list_anim" />
 
     </FrameLayout>
-
-
-</RelativeLayout>
