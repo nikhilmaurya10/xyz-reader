@@ -36,7 +36,7 @@ public class ObservableScrollView extends ScrollView {
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
         super.onScrollChanged(l, t, oldl, oldt);
         if (mCallbacks != null) {
-            mCallbacks.onScrollChanged();
+            mCallbacks.onScrollChanged(oldl-l, oldt-t);
         }
     }
 
@@ -46,7 +46,7 @@ public class ObservableScrollView extends ScrollView {
         int scrollY = getScrollY();
         // hack to call onScrollChanged on screen rotate
         if (scrollY > 0 && mCallbacks != null) {
-            mCallbacks.onScrollChanged();
+            mCallbacks.onScrollChanged(r-l, b-t);
         }
     }
 
@@ -60,6 +60,6 @@ public class ObservableScrollView extends ScrollView {
     }
 
     public static interface Callbacks {
-        public void onScrollChanged();
+        public void onScrollChanged(int dx, int dy);
     }
 }

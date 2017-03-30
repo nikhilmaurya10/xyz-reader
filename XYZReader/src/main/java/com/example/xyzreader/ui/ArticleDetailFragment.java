@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -16,13 +17,16 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ShareCompat;
 import android.support.v7.graphics.Palette;
 import android.text.Html;
 import android.text.format.DateUtils;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,8 +48,8 @@ public class ArticleDetailFragment extends Fragment implements
     private static final String TAG = "ArticleDetailFragment";
 
     public static final String ARG_ITEM_ID = "item_id";
-    private static final float PARALLAX_FACTOR = 1.25f;
-
+    private static final float PARALLAX_FACTOR = 2.55f;
+    int orientation = Configuration.ORIENTATION_UNDEFINED;
     private Cursor mCursor;
     private long mItemId;
     private View mRootView;
@@ -53,7 +57,7 @@ public class ArticleDetailFragment extends Fragment implements
     private ObservableScrollView mScrollView;
     private DrawInsetsFrameLayout mDrawInsetsFrameLayout;
     private ColorDrawable mStatusBarColorDrawable;
-
+    FloatingActionButton fab ;
     private int mTopInset;
     private View mPhotoContainerView;
     private ImageView mPhotoView;
@@ -123,14 +127,30 @@ public class ArticleDetailFragment extends Fragment implements
                 mTopInset = insets.top;
             }
         });
-
+        fab = (FloatingActionButton) mRootView.findViewById(R.id.share_fab);
         mScrollView = (ObservableScrollView) mRootView.findViewById(R.id.scrollview);
+
         mScrollView.setCallbacks(new ObservableScrollView.Callbacks() {
             @Override
-            public void onScrollChanged() {
+            public void onScrollChanged(int dx, int dy) {
                 mScrollY = mScrollView.getScrollY();
                 getActivityCast().onUpButtonFloorChanged(mItemId, ArticleDetailFragment.this);
-                mPhotoContainerView.setTranslationY((int) (mScrollY - mScrollY / PARALLAX_FACTOR));
+                Display getOrient = getActivityCast().getWindowManager().getDefaultDisplay();
+                if(getOrient.getWidth()==getOrient.getHeight()){
+                    orientation = Configuration.ORIENTATION_SQUARE;
+                } else{
+                    if(getOrient.getWidth() < getOrient.getHeight()){
+                        orientation = Configuration.ORIENTATION_PORTRAIT;
+                        mPhotoContainerView.setTranslationY((int) (mScrollY - mScrollY / PARALLAX_FACTOR));
+                    }else {
+                        orientation = Configuration.ORIENTATION_LANDSCAPE;
+                    }
+                }
+                if (dy > 0) {
+                    fab.show();
+                    } else if( dy<0) {
+                        fab.hide();
+                    }
                 updateStatusBar();
             }
         });
@@ -167,6 +187,7 @@ public class ArticleDetailFragment extends Fragment implements
                     (int) (Color.blue(mMutedColor) * 0.9));
         }
         mStatusBarColorDrawable.setColor(color);
+        if (getActivity() != null) getActivity().getWindow().setStatusBarColor(color);
         mDrawInsetsFrameLayout.setInsetBackground(mStatusBarColorDrawable);
     }
 
@@ -205,8 +226,8 @@ public class ArticleDetailFragment extends Fragment implements
         bylineView.setMovementMethod(new LinkMovementMethod());
         TextView bodyView = (TextView) mRootView.findViewById(R.id.article_body);
 
-
-        bodyView.setTypeface(Typeface.createFromAsset(getResources().getAssets(), "Rosario-Regular.ttf"));
+        titleView.setTypeface(Typeface.createFromAsset(getResources().getAssets(), "Montserrat-Medium.ttf"));
+        bodyView.setTypeface(Typeface.createFromAsset(getResources().getAssets(), "Montserrat-Regular.ttf"));
 
         if (mCursor != null) {
             mRootView.setAlpha(0);
@@ -260,7 +281,6 @@ public class ArticleDetailFragment extends Fragment implements
             bodyView.setText("N/A");
         }
     }
-
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         return ArticleLoader.newInstanceForItemId(getActivity(), mItemId);
