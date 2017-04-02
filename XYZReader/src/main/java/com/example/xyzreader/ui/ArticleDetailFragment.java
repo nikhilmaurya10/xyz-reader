@@ -18,9 +18,11 @@ import java.util.GregorianCalendar;
 
 import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -54,6 +56,7 @@ public class ArticleDetailFragment extends DialogFragment implements
         LoaderManager.LoaderCallbacks<Cursor> {
     private static final String TAG = "ArticleDetailFragment";
 
+    private static final String ARG_POSITION = "transition_string_position";
     public static final String ARG_ITEM_ID = "item_id";
     private static final float PARALLAX_FACTOR = 2.55f;
     int orientation = Configuration.ORIENTATION_UNDEFINED;
@@ -71,6 +74,7 @@ public class ArticleDetailFragment extends DialogFragment implements
     private int mScrollY;
     private boolean mIsCard = false;
     private int mStatusBarFullOpacityBottom;
+    private int mPosition;
     TextView bodyView;
     Date publishedDate;
     TextView bylineView;
@@ -88,9 +92,10 @@ public class ArticleDetailFragment extends DialogFragment implements
     public ArticleDetailFragment() {
     }
 
-    public static ArticleDetailFragment newInstance(long itemId) {
+    public static ArticleDetailFragment newInstance(long itemId, int position) {
         Bundle arguments = new Bundle();
         arguments.putLong(ARG_ITEM_ID, itemId);
+        arguments.putInt(ARG_POSITION, position);
         ArticleDetailFragment fragment = new ArticleDetailFragment();
         fragment.setArguments(arguments);
         return fragment;
@@ -101,6 +106,9 @@ public class ArticleDetailFragment extends DialogFragment implements
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         if (getArguments().containsKey(ARG_ITEM_ID)) {
             mItemId = getArguments().getLong(ARG_ITEM_ID);
+        }
+        if (getArguments().containsKey(ARG_POSITION)) {
+            mPosition = getArguments().getInt(ARG_POSITION);
         }
 
         mIsCard = getResources().getBoolean(R.bool.detail_is_card);
@@ -116,6 +124,9 @@ public class ArticleDetailFragment extends DialogFragment implements
 
         if (getArguments().containsKey(ARG_ITEM_ID)) {
             mItemId = getArguments().getLong(ARG_ITEM_ID);
+        }
+        if (getArguments().containsKey(ARG_POSITION)) {
+            mPosition = getArguments().getInt(ARG_POSITION);
         }
 
         mIsCard = getResources().getBoolean(R.bool.detail_is_card);
@@ -143,6 +154,8 @@ public class ArticleDetailFragment extends DialogFragment implements
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_article_detail, container, false);
+        mRootView.findViewById(R.id.photo).setTransitionName(getString(R.string.transition_photo)+String.valueOf(mPosition));
+        Log.d("FRAG>>>>>>",mRootView.findViewById(R.id.photo).getTransitionName());
         mDrawInsetsFrameLayout = (DrawInsetsFrameLayout)
                 mRootView.findViewById(R.id.draw_insets_frame_layout);
         mDrawInsetsFrameLayout.setOnInsetsCallback(new DrawInsetsFrameLayout.OnInsetsCallback() {
@@ -297,6 +310,7 @@ public class ArticleDetailFragment extends DialogFragment implements
 
     @Override
     public void onLoadFinished(android.support.v4.content.Loader<Cursor> loader, Cursor cursor) {
+        getActivityCast().scheduleStartPostponedTransition(mPhotoView, getActivity());
         if (!isAdded()) {
             if (cursor != null) {
                 cursor.close();

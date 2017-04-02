@@ -7,6 +7,7 @@
         <!--suppress AndroidLintContentDescription -->
         <ImageView
             android:id="@+id/photo"
+            android:transitionName="@string/transition_photo"
             android:layout_width="match_parent"
             android:layout_height="280dp"
             android:scaleType="centerCrop"

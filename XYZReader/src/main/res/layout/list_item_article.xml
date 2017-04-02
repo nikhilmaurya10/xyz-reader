@@ -14,6 +14,7 @@
     <!--suppress AndroidLintContentDescription -->
     <com.example.xyzreader.ui.DynamicHeightNetworkImageView
         android:id="@+id/thumbnail"
+        android:transitionName="@string/transition_photo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scaleType="centerCrop"
@@ -24,7 +25,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_gravity="bottom"
-        android:background="#68000000">
+        android:background="#68000000"
+        android:transitionName="@string/transition_text">
 
 
 

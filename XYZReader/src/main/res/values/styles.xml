@@ -20,6 +20,9 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowEnterTransition">@transition/list_exit</item>
+        <item name="android:windowExitTransition">@transition/list_exit</item>
         <!--<item name="toolbarStyle">@style/Toolbar</item>-->
     </style>
     <style name="AppTheme.Main" parent="@style/AppTheme">
