@@ -90,7 +90,6 @@ public class ArticleDetailActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 supportFinishAfterTransition();
-                onSupportNavigateUp();
             }
         });
 

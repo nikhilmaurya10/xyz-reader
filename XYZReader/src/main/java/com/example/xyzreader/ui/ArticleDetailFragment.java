@@ -34,6 +34,7 @@ import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.android.volley.VolleyError;
@@ -61,13 +62,13 @@ public class ArticleDetailFragment extends DialogFragment implements
     private ObservableScrollView mScrollView;
     private DrawInsetsFrameLayout mDrawInsetsFrameLayout;
     private ColorDrawable mStatusBarColorDrawable;
-    FloatingActionButton fab ;
     private int mTopInset;
     private ImageView mPhotoView;
     private int mScrollY;
     private boolean mIsCard = false;
     private int mStatusBarFullOpacityBottom;
     private int mPosition;
+    private FloatingActionButton fab;
     TextView bodyView;
     Date publishedDate;
     TextView bylineView;
@@ -147,7 +148,6 @@ public class ArticleDetailFragment extends DialogFragment implements
             Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_article_detail, container, false);
         mRootView.findViewById(R.id.photo).setTransitionName(getString(R.string.transition_photo)+String.valueOf(mPosition));
-        Log.d("FRAG>>>>>>",mRootView.findViewById(R.id.photo).getTransitionName());
         mDrawInsetsFrameLayout = (DrawInsetsFrameLayout)
                 mRootView.findViewById(R.id.draw_insets_frame_layout);
         mDrawInsetsFrameLayout.setOnInsetsCallback(new DrawInsetsFrameLayout.OnInsetsCallback() {
@@ -188,13 +188,15 @@ public class ArticleDetailFragment extends DialogFragment implements
 
         mStatusBarColorDrawable = new ColorDrawable(0);
 
-        mRootView.findViewById(R.id.share_fab).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(Intent.createChooser(ShareCompat.IntentBuilder.from(getActivity())
-                        .setType("text/plain")
-                        .setText("Some sample text")
-                        .getIntent(), getString(R.string.action_share)));
+        fab = (FloatingActionButton) mRootView.findViewById(R.id.share_fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View view) {
+        fab.startAnimation(AnimationUtils.loadAnimation(getContext(),R.anim.fab_rotate));
+        startActivity(Intent.createChooser(ShareCompat.IntentBuilder.from(getActivity())
+                .setType("text/plain")
+                .setText("Some sample text")
+                .getIntent(), getString(R.string.action_share)));
             }
         });
 
