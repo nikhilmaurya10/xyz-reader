@@ -20,10 +20,9 @@ import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.format.DateUtils;
 import android.util.Log;
-import android.util.TypedValue;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.xyzreader.R;
@@ -56,6 +55,7 @@ public class ArticleListActivity extends AppCompatActivity implements
     // Most time functions can only handle 1902 - 2037
     private GregorianCalendar START_OF_EPOCH = new GregorianCalendar(2,1,1);
 
+    private LinearLayout headerView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -154,12 +154,13 @@ public class ArticleListActivity extends AppCompatActivity implements
                 @Override
                 public void onClick(View view) {
                     Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(ArticleListActivity.this,view.findViewById(R.id.thumbnail),
-                            view.findViewById(R.id.thumbnail).getTransitionName()+vh.getAdapterPosition()).toBundle();
+                            view.findViewById(R.id.thumbnail).getTransitionName()).toBundle();
                     Log.d("MAIN>>>>>>>>>",view.findViewById(R.id.thumbnail).getTransitionName());
                     Intent intent = new Intent(Intent.ACTION_VIEW,
                             ItemsContract.Items.buildItemUri(getItemId(vh.getAdapterPosition())));
 
                     startActivity(intent, bundle);
+
                 }
             });
             return vh;
