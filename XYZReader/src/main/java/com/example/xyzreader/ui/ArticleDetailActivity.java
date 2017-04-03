@@ -90,6 +90,7 @@ public class ArticleDetailActivity extends AppCompatActivity
         mUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                supportFinishAfterTransition();
                 onSupportNavigateUp();
             }
         });
@@ -118,17 +119,18 @@ public class ArticleDetailActivity extends AppCompatActivity
         Log.v("DETAIL", "transition name from get method: "+ mCurrentPosition);
         return mCurrentPosition;
     }
-    public void scheduleStartPostponedTransition(final View sharedElement, final Activity activity) {
+    public void scheduleStartPostponedTransition(final View sharedElement) {
         Log.d("DET>>>>>>>>>>","statingTran@"+mCursor.getPosition());
         sharedElement.getViewTreeObserver().addOnPreDrawListener(
                 new ViewTreeObserver.OnPreDrawListener() {
                     @Override
                     public boolean onPreDraw() {
                         sharedElement.getViewTreeObserver().removeOnPreDrawListener(this);
-                        ActivityCompat.startPostponedEnterTransition(activity);
+                        startPostponedEnterTransition();
                         return true;
                     }
                 });
+
     }
 
     @Override

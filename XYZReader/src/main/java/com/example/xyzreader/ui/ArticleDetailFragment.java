@@ -273,8 +273,8 @@ public class ArticleDetailFragment extends DialogFragment implements
             titleView.setText(mCursor.getString(ArticleLoader.Query.TITLE));
 
 //            bodyView.setText(Html.fromHtml(mCursor.getString(ArticleLoader.Query.BODY).replaceAll("(\r\n|\n)", "<br />")));
-            AsyncTask task = new BodyTextLoaderTask();
-            task.execute();
+
+
             ImageLoaderHelper.getInstance(getActivity()).getImageLoader()
                     .get(mCursor.getString(ArticleLoader.Query.PHOTO_URL), new ImageLoader.ImageListener() {
                         @Override
@@ -295,6 +295,8 @@ public class ArticleDetailFragment extends DialogFragment implements
 
                         }
                     });
+            AsyncTask task = new BodyTextLoaderTask();
+            task.execute();
         } else {
             mRootView.setVisibility(View.GONE);
             titleView.setText("N/A");
@@ -310,7 +312,7 @@ public class ArticleDetailFragment extends DialogFragment implements
 
     @Override
     public void onLoadFinished(android.support.v4.content.Loader<Cursor> loader, Cursor cursor) {
-        getActivityCast().scheduleStartPostponedTransition(mPhotoView, getActivity());
+        getActivityCast().scheduleStartPostponedTransition(mPhotoView);
         if (!isAdded()) {
             if (cursor != null) {
                 cursor.close();

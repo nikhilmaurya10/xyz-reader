@@ -1,6 +1,7 @@
 package com.example.xyzreader.ui;
 
 
+import android.app.ActivityOptions;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -152,13 +153,13 @@ public class ArticleListActivity extends AppCompatActivity implements
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(ArticleListActivity.this,view.findViewById(R.id.thumbnail),
+                    Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(ArticleListActivity.this,view.findViewById(R.id.thumbnail),
                             view.findViewById(R.id.thumbnail).getTransitionName()+vh.getAdapterPosition()).toBundle();
                     Log.d("MAIN>>>>>>>>>",view.findViewById(R.id.thumbnail).getTransitionName());
                     Intent intent = new Intent(Intent.ACTION_VIEW,
                             ItemsContract.Items.buildItemUri(getItemId(vh.getAdapterPosition())));
-                    intent.putExtras(bundle);
-                    startActivity(intent);
+
+                    startActivity(intent, bundle);
                 }
             });
             return vh;
