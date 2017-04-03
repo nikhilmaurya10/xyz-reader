@@ -45,8 +45,8 @@ public class ArticleDetailActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        ActivityCompat.postponeEnterTransition(this);
+        postponeEnterTransition();
+//        ActivityCompat.postponeEnterTransition(this);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().getDecorView().setSystemUiVisibility(
@@ -120,7 +120,6 @@ public class ArticleDetailActivity extends AppCompatActivity
         return mCurrentPosition;
     }
     public void scheduleStartPostponedTransition(final View sharedElement) {
-        Log.d("DET>>>>>>>>>>","statingTran@"+mCursor.getPosition());
         sharedElement.getViewTreeObserver().addOnPreDrawListener(
                 new ViewTreeObserver.OnPreDrawListener() {
                     @Override
