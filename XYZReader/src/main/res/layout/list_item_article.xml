@@ -30,32 +30,16 @@
 
         <TextView
             android:id="@+id/article_title"
-            style="@style/TextAppearance.AppCompat.Subhead"
+            style="@style/CardTitleTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-condensed"
-            android:padding="@dimen/card_header_title_padding"
-            android:textColor="@android:color/white"
-            android:ellipsize="end"
-            android:maxLines="4"
-            android:textStyle="bold"
             tools:text="Hello Title"/>
         <TextView
             android:id="@+id/article_subtitle"
-            style="@style/TextAppearance.AppCompat.Body1"
+            style="@style/CardBylineTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="@dimen/card_header_byline_padding_verticle"
-            android:paddingBottom="@dimen/card_header_byline_padding_verticle"
-            android:paddingStart="@dimen/card_header_byline_padding_horizontal"
-            android:paddingEnd="@dimen/card_header_byline_padding_horizontal"
-            android:textColor="@android:color/white"
-            android:maxLines="2"
-            android:textSize="@dimen/card_byline_textSize"
-            android:textStyle="italic"
-            android:gravity="center_horizontal"
-            tools:text="by Carl sympsion"
-            android:background="@android:color/black"/>
+            tools:text="by Carl sympsion"/>
     </LinearLayout>
 
 
