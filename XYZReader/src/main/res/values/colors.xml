@@ -27,4 +27,10 @@
     <color name="colorPrimary">#009688</color>
     <color name="colorPrimaryDark">#00695C</color>
     <color name="colorAccent">#1DE9B6</color>
+
+    <color name="metabar_background">#333</color>
+    <color name="byline_color">#8fff</color>
+    <color name="bodytext_color">#9E9E9E</color>
+
+    <color name="header_background">#68000000</color>
 </resources>

@@ -7,5 +7,25 @@
     <dimen name="fab_elevation">2dp</dimen>
     <dimen name="fab_press_translation_z">6dp</dimen>
     <dimen name="fab_margin">24dp</dimen>
+    <dimen name="fab_size">56dp</dimen>
 
+
+    <dimen name="button_size">56dp</dimen>
+    <dimen name="button_marginTop">16dp</dimen>
+    <dimen name="button_paddingBotton">16dp</dimen>
+
+    <dimen name="appbar_elevation">4dp</dimen>
+
+    <dimen name="recyclerview_paddingTop">4dp</dimen>
+    <dimen name="recyclerview_paddingBottom">28dp</dimen>
+
+    <dimen name="maxWidthLinearLayout_elevation">2dp</dimen>
+
+    <dimen name="default_16dp_padding">16dp</dimen>
+
+    <dimen name="list_card_margin">4dp</dimen>
+    <dimen name="card_header_title_padding">8dp</dimen>
+    <dimen name="card_header_byline_padding_verticle">4dp</dimen>
+    <dimen name="card_header_byline_padding_horizontal">8dp</dimen>
+    <dimen name="card_byline_textSize">9dp</dimen>
 </resources>

@@ -16,10 +16,10 @@
         <ImageButton
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             android:id="@+id/action_up"
-            android:layout_width="56dp"
+            android:layout_width="@dimen/button_size"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:paddingBottom="16dp"
+            android:layout_marginTop="@dimen/button_marginTop"
+            android:paddingBottom="@dimen/button_paddingBotton"
             android:background="?selectableItemBackgroundBorderless"
             android:contentDescription="@string/up"
             android:src="@drawable/ic_arrow_back"

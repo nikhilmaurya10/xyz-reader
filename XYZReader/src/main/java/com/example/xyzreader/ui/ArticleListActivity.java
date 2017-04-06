@@ -9,7 +9,10 @@ import android.content.IntentFilter;
 import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.Typeface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -58,25 +61,33 @@ public class ArticleListActivity extends AppCompatActivity implements
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article_list);
         getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(mToolbar);
-
-
-//        final View toolbarContainerView = findViewById(R.id.toolbar_container);
-
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        if (!networkUp()) {
+            View sv = findViewById(android.R.id.content);
+            if(sv != null) {
+                Snackbar.make(sv, getResources().getString(R.string.error_network), Snackbar.LENGTH_LONG).show();
+            }
+        }
+
         getSupportLoaderManager().initLoader(0, null, this);
 
         if (savedInstanceState == null) {
             refresh();
         }
     }
-
+    private boolean networkUp() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnectedOrConnecting();
+    }
     private void refresh() {
         startService(new Intent(this, UpdaterService.class));
     }
@@ -112,12 +123,19 @@ public class ArticleListActivity extends AppCompatActivity implements
 
     @Override
     public android.support.v4.content.Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+
         return ArticleLoader.newAllArticlesInstance(this);
     }
 
     @Override
     public void onLoadFinished(android.support.v4.content.Loader<Cursor> loader, Cursor cursor) {
 
+        if (cursor.getCount() == 0) {
+            View sv = findViewById(android.R.id.content);
+            if(sv != null) {
+                Snackbar.make(sv, getResources().getString(R.string.error), Snackbar.LENGTH_LONG).show();
+            }
+        }
 
         Adapter adapter = new Adapter(cursor);
         adapter.setHasStableIds(true);
@@ -227,5 +245,4 @@ public class ArticleListActivity extends AppCompatActivity implements
             subtitleView = (TextView) view.findViewById(R.id.article_subtitle);
         }
     }
-    //jck
 }

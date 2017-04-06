@@ -41,6 +41,7 @@ public class ArticleDetailActivity extends AppCompatActivity
     private MyPagerAdapter mPagerAdapter;
     private View mUpButtonContainer;
     private View mUpButton;
+    boolean isCard = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +57,7 @@ public class ArticleDetailActivity extends AppCompatActivity
         setContentView(R.layout.activity_article_detail);
 
         getSupportLoaderManager().initLoader(0, null, this);
-
+        isCard = getResources().getBoolean(R.bool.detail_is_card);
         mPagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
         mPager = (ViewPager) findViewById(R.id.pager);
         mPager.setAdapter(mPagerAdapter);
@@ -113,10 +114,7 @@ public class ArticleDetailActivity extends AppCompatActivity
             }
         }
     }
-    public Integer getmCurrentPosition() {
-        Log.v("DETAIL", "transition name from get method: "+ mCurrentPosition);
-        return mCurrentPosition;
-    }
+
     public void scheduleStartPostponedTransition(final View sharedElement) {
         sharedElement.getViewTreeObserver().addOnPreDrawListener(
                 new ViewTreeObserver.OnPreDrawListener() {
@@ -166,12 +164,16 @@ public class ArticleDetailActivity extends AppCompatActivity
     public void onUpButtonFloorChanged(long itemId, ArticleDetailFragment fragment) {
         if (itemId == mSelectedItemId) {
             mSelectedItemUpButtonFloor = fragment.getUpButtonFloor();
+            if (isCard && mSelectedItemUpButtonFloor <= 1042) {
+                mUpButton.setVisibility(View.INVISIBLE);
+            } else mUpButton.setVisibility(View.VISIBLE);
             updateUpButtonPosition();
         }
     }
 
     private void updateUpButtonPosition() {
         int upButtonNormalBottom = mTopInset + mUpButton.getHeight();
+
         mUpButton.setTranslationY(Math.min(mSelectedItemUpButtonFloor - upButtonNormalBottom, 0));
     }
 

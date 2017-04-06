@@ -11,4 +11,7 @@
 
     <string name="transition_photo">transitionPoster</string>
     <string name="transition_text">transitionText</string>
+
+    <string name="error_network">No Internet Connection!</string>
+    <string name="error">Something went wrong!</string>
 </resources>

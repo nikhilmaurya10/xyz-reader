@@ -1,9 +1,7 @@
 package com.example.xyzreader.ui;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
-import android.content.Loader;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -98,23 +96,17 @@ public class ArticleDetailFragment extends DialogFragment implements
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        if (getArguments().containsKey(ARG_ITEM_ID)) {
-            mItemId = getArguments().getLong(ARG_ITEM_ID);
-        }
-        if (getArguments().containsKey(ARG_POSITION)) {
-            mPosition = getArguments().getInt(ARG_POSITION);
-        }
-
-        mIsCard = getResources().getBoolean(R.bool.detail_is_card);
-        mStatusBarFullOpacityBottom = getResources().getDimensionPixelSize(
-                R.dimen.detail_card_top_margin);
-        setHasOptionsMenu(true);
+        initOnCreate();
         return super.onCreateDialog(savedInstanceState);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initOnCreate();
+    }
+
+    void initOnCreate() {
         if (getArguments().containsKey(ARG_ITEM_ID)) {
             mItemId = getArguments().getLong(ARG_ITEM_ID);
         }
@@ -126,8 +118,8 @@ public class ArticleDetailFragment extends DialogFragment implements
         mStatusBarFullOpacityBottom = getResources().getDimensionPixelSize(
                 R.dimen.detail_card_top_margin);
         setHasOptionsMenu(true);
-    }
 
+    }
     public ArticleDetailActivity getActivityCast() {
         return (ArticleDetailActivity) getActivity();
     }
@@ -173,6 +165,9 @@ public class ArticleDetailFragment extends DialogFragment implements
                         mPhotoView.setTranslationY((int) (mScrollY - mScrollY / PARALLAX_FACTOR));
                     }else {
                         orientation = Configuration.ORIENTATION_LANDSCAPE;
+                        if (mIsCard) {
+                            mPhotoView.setTranslationY((int) (mScrollY - mScrollY / PARALLAX_FACTOR));
+                        }
                     }
                 }
                 if (dy > 0) {

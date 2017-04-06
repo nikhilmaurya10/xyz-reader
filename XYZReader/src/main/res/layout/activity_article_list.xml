@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         android:fitsSystemWindows="true"
-        android:elevation="12dp"
+        android:elevation="@dimen/appbar_elevation"
         >
 
         <android.support.v7.widget.Toolbar
@@ -49,7 +49,8 @@
             android:scrollbarStyle="outsideOverlay"
             android:paddingLeft="@dimen/list_side_margin"
             android:paddingRight="@dimen/list_side_margin"
-            android:paddingBottom="28dp" />
+            android:paddingTop="@dimen/recyclerview_paddingTop"
+            android:paddingBottom="@dimen/recyclerview_paddingBottom" />
     </android.support.v4.widget.SwipeRefreshLayout>
 
 

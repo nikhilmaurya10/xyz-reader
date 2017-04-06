@@ -4,4 +4,8 @@
 
     <dimen name="detail_photo_height">600dp</dimen>
     <dimen name="detail_card_top_margin">256dp</dimen>
+
+    <dimen name="detail_card_view_width">700dp</dimen>
+    <dimen name="detail_card_view_height">500dp</dimen>
+    <dimen name="detail_card_view_marginTop">32dp</dimen>
 </resources>
