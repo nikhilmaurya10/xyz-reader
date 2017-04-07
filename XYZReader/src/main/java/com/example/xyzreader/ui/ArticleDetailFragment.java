@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -262,15 +263,19 @@ public class ArticleDetailFragment extends DialogFragment implements
             ImageLoaderHelper.getInstance(getActivity()).getImageLoader()
                     .get(mCursor.getString(ArticleLoader.Query.PHOTO_URL), new ImageLoader.ImageListener() {
                         @Override
-                        public void onResponse(ImageLoader.ImageContainer imageContainer, boolean b) {
+                        public void onResponse(final ImageLoader.ImageContainer imageContainer, boolean b) {
                             Bitmap bitmap = imageContainer.getBitmap();
                             if (bitmap != null) {
-                                Palette p = Palette.generate(bitmap, 12);
-                                mMutedColor = p.getDarkMutedColor(0xFF333333);
-                                mPhotoView.setImageBitmap(imageContainer.getBitmap());
-                                mRootView.findViewById(R.id.meta_bar)
-                                        .setBackgroundColor(mMutedColor);
-                                updateStatusBar();
+                                Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
+                                    public void onGenerated(Palette p) {
+                                        mMutedColor = p.getDarkMutedColor(0xFF333333);
+                                        mPhotoView.setImageBitmap(imageContainer.getBitmap());
+                                        mRootView.findViewById(R.id.meta_bar)
+                                                .setBackgroundColor(mMutedColor);
+                                        updateStatusBar();
+                                    }
+                                });
+
                             }
                         }
 
@@ -339,26 +344,32 @@ public class ArticleDetailFragment extends DialogFragment implements
 
             publishedDate = parsePublishedDate();
             Spanned byline;
+            String htmlString;
             if (!publishedDate.before(START_OF_EPOCH.getTime())) {
-                byline = Html.fromHtml(
-                        DateUtils.getRelativeTimeSpanString(
-                                publishedDate.getTime(),
-                                System.currentTimeMillis(), DateUtils.HOUR_IN_MILLIS,
-                                DateUtils.FORMAT_ABBREV_ALL).toString()
-                                + " by <font color='#ffffff'>"
-                                + mCursor.getString(ArticleLoader.Query.AUTHOR)
-                                + "</font>");
-
+                htmlString = DateUtils.getRelativeTimeSpanString(
+                        publishedDate.getTime(),
+                        System.currentTimeMillis(), DateUtils.HOUR_IN_MILLIS,
+                        DateUtils.FORMAT_ABBREV_ALL).toString()
+                        + " by <font color='#ffffff'>"
+                        + mCursor.getString(ArticleLoader.Query.AUTHOR)
+                        + "</font>";
             } else {
                 // If date is before 1902, just show the string
-                byline = Html.fromHtml(
-                        outputFormat.format(publishedDate) + " by <font color='#ffffff'>"
-                                + mCursor.getString(ArticleLoader.Query.AUTHOR)
-                                + "</font>");
-
+                htmlString = outputFormat.format(publishedDate) + " by <font color='#ffffff'>"
+                        + mCursor.getString(ArticleLoader.Query.AUTHOR)
+                        + "</font>";
             }
-            Spanned bodytext = Html.fromHtml(mCursor.getString(ArticleLoader.Query.BODY).replaceAll("(\r\n|\n)", "<br />"));
-            return new Pair(bodytext , byline);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                byline = Html.fromHtml(htmlString, 0);
+            } else byline = Html.fromHtml(htmlString) ;
+
+            Spanned bodyText;
+            String bodyHtmlString = mCursor.getString(ArticleLoader.Query.BODY).replaceAll("(\r\n|\n)", "<br />");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                bodyText = Html.fromHtml(bodyHtmlString, 0);
+            } else bodyText = Html.fromHtml(bodyHtmlString) ;
+
+            return new Pair(bodyText , byline);
         }
         @Override
         protected void onPreExecute() {
@@ -369,6 +380,8 @@ public class ArticleDetailFragment extends DialogFragment implements
         protected void onPostExecute(Pair spannedText) {
             if(bodyView != null) {
                 bodyView.setText((Spanned)spannedText.first);
+                bodyView.setMovementMethod(LinkMovementMethod.getInstance());
+
             }
             if(bylineView !=null) {
                 bylineView.setText((Spanned)spannedText.second);
