@@ -59,7 +59,6 @@ public class ArticleListActivity extends AppCompatActivity implements
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article_list);
-        getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
 

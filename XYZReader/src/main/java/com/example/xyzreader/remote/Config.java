@@ -13,6 +13,7 @@ public class Config {
         URL url = null;
         try {
             url = new URL("https://nspf.github.io/XYZReader/data.json" );
+            //more url "https://raw.githubusercontent.com/Protino/dump/master/Lego/data.json"
         } catch (MalformedURLException ignored) {
             // TODO: throw a real error
             Log.e(TAG, "Please check your internet connection.");

@@ -28,8 +28,7 @@ import android.text.Html;
 import android.text.Spanned;
 import android.text.format.DateUtils;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
-import android.view.Display;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -156,12 +155,19 @@ public class ArticleDetailFragment extends DialogFragment implements
             @Override
             public void onScrollChanged(int dx, int dy) {
                 mScrollY = mScrollView.getScrollY();
+                int totalHeight = mScrollView.getChildAt(0).getMeasuredHeight() - mScrollView.getMeasuredHeight();
+
                 getActivityCast().onUpButtonFloorChanged(mItemId, ArticleDetailFragment.this);
-                Display getOrient = getActivityCast().getWindowManager().getDefaultDisplay();
-                if(getOrient.getWidth()==getOrient.getHeight()){
+
+                DisplayMetrics displaymetrics = new DisplayMetrics();
+                getActivityCast().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+                int screenWidth = displaymetrics.widthPixels;
+                int screenHeight = displaymetrics.heightPixels;
+
+                if(screenWidth == screenHeight){
                     orientation = Configuration.ORIENTATION_SQUARE;
                 } else{
-                    if(getOrient.getWidth() < getOrient.getHeight()){
+                    if(screenWidth < screenHeight){
                         orientation = Configuration.ORIENTATION_PORTRAIT;
                         mPhotoView.setTranslationY((int) (mScrollY - mScrollY / PARALLAX_FACTOR));
                     }else {
@@ -171,11 +177,16 @@ public class ArticleDetailFragment extends DialogFragment implements
                         }
                     }
                 }
-                if (dy > 0) {
-                    fab.show();
-                    } else if( dy<0) {
-                        fab.hide();
-                    }
+
+                if (mScrollY == 0 ) {
+                    fab.show();                     // show fab on top
+                } else if( dy<0 ) fab.hide();       // hide fab on scroll down
+                if (mScrollY == totalHeight) {
+                    fab.show();                     // show fab when at bottom
+                } else if (dy > 0 && dy <100 && mScrollY != 0) fab.hide(); // hide fab when slowly scrolling upward
+                if (dy > 300) fab.show(); //show fab on fast upward fling
+
+
                 updateStatusBar();
             }
         });
@@ -236,8 +247,6 @@ public class ArticleDetailFragment extends DialogFragment implements
             String date = mCursor.getString(ArticleLoader.Query.PUBLISHED_DATE);
             return dateFormat.parse(date);
         } catch (ParseException ex) {
-            Log.e(TAG, ex.getMessage());
-            Log.i(TAG, "passing today's date");
             return new Date();
         }
     }
@@ -311,7 +320,6 @@ public class ArticleDetailFragment extends DialogFragment implements
 
         mCursor = cursor;
         if (mCursor != null && !mCursor.moveToFirst()) {
-            Log.e(TAG, "Error reading item detail cursor");
             mCursor.close();
             mCursor = null;
         }
