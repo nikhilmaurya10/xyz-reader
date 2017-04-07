@@ -17,11 +17,8 @@
 package com.example.xyzreader.ui;
 
 import android.content.Context;
-import android.os.Parcelable;
 import android.support.v4.widget.NestedScrollView;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.widget.ScrollView;
 
 /**
  * A custom ScrollView that can accept a scroll listener.
@@ -50,13 +47,6 @@ public class ObservableScrollView extends NestedScrollView {
             mCallbacks.onScrollChanged(r-l, b-t);
         }
     }
-
-//    @Override
-//    public int computeVerticalScrollRange() {
-//        return super.computeVerticalScrollRange();
-//    }
-//
-
 
     @Override
     public int computeVerticalScrollRange() {
